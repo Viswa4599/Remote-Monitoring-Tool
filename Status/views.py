@@ -3,7 +3,7 @@ from Status.models import CPU,Network,RAM,Clock
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.views.generic import TemplateView
-from chartjs.views.lines import BaseLineChartView
+#from chartjs.views.lines import BaseLineChartView
 
 @csrf_exempt
 def status_view(request):
