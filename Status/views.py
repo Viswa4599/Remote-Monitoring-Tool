@@ -27,6 +27,7 @@ def status_view(request):
         n.save()
 
     cpu_percent = list(CPU.objects.values_list('percent', flat=True))
+    cpu_temperature = list(CPU.objects.values_list('temperature', flat=True))
     ram_percent_ = list(RAM.objects.values_list('percent',flat = True))
     net_sent = list(Network.objects.values_list('sent',flat = True))
     net_received = list(Network.objects.values_list('sent',flat = True))
@@ -36,16 +37,18 @@ def status_view(request):
 
     #return render(request,template_name='status.html')
     cpu_graph=[]
+    cpu_temp_graph=[]
     ram_graph=[]
     sent_graph=[]
     received_graph=[]
     for i in range(len(cpu_percent)):
         cpu_graph.append([cpu_percent[i],clock[i]])
+        cpu_temp_graph.append([cpu_temperature[i],clock[i]])
         ram_graph.append([ram_percent_[i],clock[i]])
         sent_graph.append([net_sent[i],clock[i]])
         received_graph.append([net_received[i],clock[i]])
 
-    return JsonResponse(data ={'cpu_graph':cpu_graph,'ram_graph':ram_graph,'sent':sent_graph,'received':received_graph},safe = False)
+    return JsonResponse(data ={'cpu_graph':cpu_graph,'cpu_temp':cpu_temp_graph,'ram_graph':ram_graph,'sent':sent_graph,'received':received_graph},safe = False)
     #"ram_percent": ram_percent,"net_sent": net_sent,"sys_time":clock,"net_received":net_received})
 
 @csrf_exempt

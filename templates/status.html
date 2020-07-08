@@ -28,6 +28,7 @@
         var dataPointsram = [];
         var dataPointssent = [];
         var dataPointsrec = [];
+        var dataPointstemp = [];
         
         var cpuchart = new CanvasJS.Chart("chartContainer1", {
             animationEnabled: false,
@@ -45,7 +46,23 @@
                 dataPoints: dataPointscpu
             }]
         });
-        var ramchart = new CanvasJS.Chart("chartContainer2", {
+        var cputempchart = new CanvasJS.Chart("chartContainer2", {
+            animationEnabled: false,
+            theme: "light2",
+            title: {
+                text: "CPU Temperature"
+            },
+            axisY: {
+                title: "Temperature",
+                titleFontSize: 24
+            },
+            data: [{
+                type: "area",
+                yValueFormatString: "#,### Units",
+                dataPoints: dataPointstemp
+            }]
+        });
+        var ramchart = new CanvasJS.Chart("chartContainer3", {
             animationEnabled: false,
             theme: "light2",
             title: {
@@ -61,7 +78,7 @@
                 dataPoints: dataPointsram
             }]
         });
-        var sentchart = new CanvasJS.Chart("chartContainer3", {
+        var sentchart = new CanvasJS.Chart("chartContainer4", {
             animationEnabled: false,
             theme: "light2",
             title: {
@@ -77,7 +94,7 @@
                 dataPoints: dataPointssent
             }]
         });
-        var recchart = new CanvasJS.Chart("chartContainer4", {
+        var recchart = new CanvasJS.Chart("chartContainer5", {
             animationEnabled: false,
             theme: "light2",
             title: {
@@ -98,11 +115,13 @@
 var count = 0;
 function addData(data) {
     datacpu = data['cpu_graph'];
+    datatemp = data['cpu_temp'];
     dataram = data['ram_graph'];
     datasent = data['sent'];
     datarec = data['received'];;
    if(dataPointscpu.length>0){
         dataPointscpu.push({label: datacpu[datacpu.length-1][1], y:datacpu[datacpu.length-1][0]});
+        dataPointstemp.push({label: datatemp[datatemp.length-1][1], y:datatemp[datatemp.length-1][0]});
         dataPointsram.push({label: dataram[dataram.length-1][1], y:dataram[dataram.length-1][0]});
         dataPointssent.push({label: datasent[datasent.length-1][1], y:datasent[datasent.length-1][0]});
         dataPointsrec.push({label: datarec[datarec.length-1][1], y:datarec[datarec.length-1][0]});        
@@ -110,12 +129,14 @@ function addData(data) {
     else{
         for(var i =0;i<datacpu.length;i++){
             dataPointscpu.push({label:datacpu[i][1], y:datacpu[i][0]});
+            dataPointstemp.push({label:datatemp[i][1],y:datatemp[i][0]})
             dataPointsram.push({label:dataram[i][1], y:dataram[i][0]});
             dataPointssent.push({label:datasent[i][1], y:datasent[i][0]});
             dataPointsrec.push({label:datarec[i][1], y:datarec[i][0]});
         }
     }
     cpuchart.render()
+    cputempchart.render()
     ramchart.render()
     sentchart.render()
     recchart.render()
@@ -124,7 +145,7 @@ function addData(data) {
 }
 
 function updateData() {
-	$.getJSON('http://127.0.0.1:8001/cpujson/', addData);
+	$.getJSON('http://127.0.0.1:8000/cpujson/', addData);
 }
 
 }
@@ -132,24 +153,30 @@ function updateData() {
 
     <body>
         <div>
-            <h2>CPU</h2>
-            <div id="chartContainer1" style="height: 270px; width: 100%;"></div>
+            <h2>CPU Percentage</h2>
+            <div id="chartContainer1" style="height: 270px; width: 75%;"></div>
             <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         </div>
         <div>
-            <h2>RAM</h2>
+            <h2>CPU Temperature</h2>
             <div id="chartContainer2" style="height: 270px; width: 75%;"></div>
             <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         </div>
         <div>
-            <h2>Network</h2>
+            <h2>RAM</h2>
             <div id="chartContainer3" style="height: 270px; width: 75%;"></div>
             <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-
+        </div>
+        <div>
+            <h2>Network</h2>
             <div id="chartContainer4" style="height: 270px; width: 75%;"></div>
+            <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+            <div id="chartContainer5" style="height: 270px; width: 75%;"></div>
             <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         </div>
